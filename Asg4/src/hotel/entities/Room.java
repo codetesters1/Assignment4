@@ -15,12 +15,14 @@ public class Room {
 	RoomType roomType;
 	List<Booking> bookings;
 	State state;
+	BookingHelper bookingHelper;
 
 	
 	public Room(int id, RoomType roomType) {
 		this.id = id;
 		this.roomType = roomType;
 		bookings = new ArrayList<>();
+		bookingHelper = BookingHelper.getInstance();
 		state = State.READY;
 	}
 	
@@ -59,20 +61,37 @@ public class Room {
 	}
 
 
+	public boolean isOccupied() {
+		return state == State.OCCUPIED;
+	}
+
+
 	public Booking book(Guest guest, Date arrivalDate, int stayLength, int numberOfOccupants, CreditCard creditCard) {
-		Booking booking = new Booking(guest, this, arrivalDate, numberOfOccupants, numberOfOccupants, creditCard);
+		if (!isAvailable(arrivalDate, stayLength)) {
+			throw new RuntimeException("Cannot create an overlapping booking");
+		}
+		Booking booking = bookingHelper.makeBooking(guest, this, arrivalDate, stayLength, numberOfOccupants, creditCard);
 		bookings.add(booking);
 		return booking;		
 	}
 
 
 	public void checkin() {
+		if (state != State.READY) {
+			String msg = String.format("Room: checkin : bad state : %s", state);
+			throw new RuntimeException(msg);
+		}
 		state = State.OCCUPIED;
 	}
 
 
 	public void checkout(Booking booking) {
-		state = state.READY;
+		if (state != State.OCCUPIED) {
+			String msg = String.format("Room: checkout : bad state : %s", state);
+			throw new RuntimeException(msg);
+		}
+		bookings.remove(booking);
+		state = State.READY;
 	}
 
 
