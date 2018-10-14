@@ -1,9 +1,11 @@
 package hotel.entities;
 
+import java.util.ArrayList;   //import ArrayList
+import java.util.Collections; //import Collections
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.List;  //import List
 import hotel.credit.CreditCard;
 import hotel.utils.IOUtils;
 
@@ -126,6 +128,7 @@ public class Hotel {
 			throw new RuntimeException(mesg);
 		}
 		booking.checkOut();
+		activeBookingsByRoomId.remove(roomId);
 	}
 
 
