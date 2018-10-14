@@ -68,6 +68,10 @@ public class Hotel {
 		return booking;
 	}
 
+	public List<Room> findRoomsByType(RoomType type) {		
+		List<Room> rooms = new ArrayList<>(roomsByType.get(type).values());		
+		return Collections.unmodifiableList(rooms);		  //returing the collections of room by type
+	}
 
 	public Room findAvailableRoom(RoomType selectedRoomType, Date arrivalDate, int stayLength) {
 		IOUtils.trace("Hotel: checkRoomAvailability");
