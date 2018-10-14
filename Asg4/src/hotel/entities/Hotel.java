@@ -128,7 +128,7 @@ public class Hotel {
 			throw new RuntimeException(mesg);
 		}
 		booking.checkOut();
-		activeBookingsByRoomId.remove(roomId);
+		activeBookingsByRoomId.remove(roomId); // removing active booking after checkout so services cannot be charged after room is checked out BUG FIX 2
 	}
 
 
