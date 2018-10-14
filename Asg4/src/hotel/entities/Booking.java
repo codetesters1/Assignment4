@@ -135,7 +135,12 @@ public class Booking {
 
 
 	public void checkIn() {
+		if (state != State.PENDING){  //if condition to make sure if the room is not checked in before
+			String msg = String.format("Booking: checkIn : bad state : %s", state);
+			throw new RuntimeException(msg);
+		}
 		room.checkin();
+		state = State.CHECKED_IN; // setting the room state to checked in
 	}
 
 
@@ -150,7 +155,14 @@ public class Booking {
 
 
 	public void checkOut() {
+		if (state != State.CHECKED_IN){  //if condition to make sure if the room is not checked out before
+			String msg = String.format("Booking: checkOut : bad state : %s", state);
+			throw new RuntimeException(msg);
+		}
+		
+		
 		room.checkout(this);
+		state = State.CHECKED_OUT; // setting the room state to checked out
 	}
 
 }
