@@ -23,7 +23,7 @@ public class Booking {
 	CreditCard creditCard;
 	
 	private List<ServiceCharge> charges;
-	
+	ServiceChargeHelper serviceChargeHelper; // serviceChargeHelper type object
 	private State state;
 
 
@@ -42,6 +42,7 @@ public class Booking {
 		this.creditCard = creditCard;
 		this.charges = new ArrayList<>();
 		this.state = State.PENDING;
+		this.serviceChargeHelper = ServiceChargeHelper.getInstance(); //setting ServiceChargeHelper instance
 	}
 
 	
@@ -139,7 +140,12 @@ public class Booking {
 
 
 	public void addServiceCharge(ServiceType serviceType, double cosst) {
-		charges.add(new ServiceCharge(serviceType, cost));
+		if (state != State.CHECKED_IN) {    
+			String msg = String.format("Booking: addServiceCharge : bad state : %s", state);   
+			throw new RunTimeException(msg);
+		}
+		ServiceCharge charge = serviceChargeHelper.makeServiceCharge(serviceType, cost);
+		charges.add(charge);
 	}
 
 
