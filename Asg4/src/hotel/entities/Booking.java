@@ -140,12 +140,12 @@ public class Booking {
 
 
 	public void addServiceCharge(ServiceType serviceType, double cosst) {
-		if (state != State.CHECKED_IN) {    
+		if (state != State.CHECKED_IN) {      // if condition to make sure if the room is checked in then proceed to charge services
 			String msg = String.format("Booking: addServiceCharge : bad state : %s", state);   
 			throw new RunTimeException(msg);
 		}
 		ServiceCharge charge = serviceChargeHelper.makeServiceCharge(serviceType, cost);
-		charges.add(charge);
+		charges.add(charge);  // BUG FIX : adding service charges
 	}
 
 
