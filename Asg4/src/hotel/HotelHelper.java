@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-
+import java.util.List;
 import hotel.credit.CreditCard;
 import hotel.credit.CreditCardType;
 import hotel.entities.Booking;
@@ -32,7 +32,7 @@ public class HotelHelper {
 		hotel.addRoom(RoomType.DOUBLE, 201);
 		hotel.addRoom(RoomType.TWIN_SHARE, 301);
 		
-		Guest guest = new Guest("Fred", "Nurke", 2);
+		Guest guest = hotel.registerGuest("Fred", "Nurke", 2);
 		CreditCard card = new CreditCard(CreditCardType.VISA, 2, 2);
 		
 		Room room = hotel.findAvailableRoom(RoomType.TWIN_SHARE, date, 1);
@@ -43,9 +43,9 @@ public class HotelHelper {
 		
 		IOUtils.trace("HotelHelper");
 		for (RoomType rt : RoomType.values()) {
-			Map<Integer, Room> rooms = hotel.roomsByType.get(rt);
-			for (Integer id : rooms.keySet()) {
-				IOUtils.outputln(rooms.get(id));
+			List<Room> rooms = hotel.findRoomsByType(rt);
+			for (Room rm: rooms) {	
+				IOUtils.trace(rm);
 			}
 		}		
 		return hotel;

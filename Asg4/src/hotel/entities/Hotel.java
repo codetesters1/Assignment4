@@ -1,9 +1,11 @@
 package hotel.entities;
 
+import java.util.ArrayList;   //import ArrayList
+import java.util.Collections; //import Collections
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.List;  //import List
 import hotel.credit.CreditCard;
 import hotel.utils.IOUtils;
 
@@ -66,6 +68,10 @@ public class Hotel {
 		return booking;
 	}
 
+	public List<Room> findRoomsByType(RoomType type) {		
+		List<Room> rooms = new ArrayList<>(roomsByType.get(type).values());		
+		return Collections.unmodifiableList(rooms);		  //returing the collections of room by type
+	}
 
 	public Room findAvailableRoom(RoomType selectedRoomType, Date arrivalDate, int stayLength) {
 		IOUtils.trace("Hotel: checkRoomAvailability");
@@ -126,6 +132,7 @@ public class Hotel {
 			throw new RuntimeException(mesg);
 		}
 		booking.checkOut();
+		activeBookingsByRoomId.remove(roomId); // removing active booking after checkout so services cannot be charged after room is checked out BUG FIX 2
 	}
 
 

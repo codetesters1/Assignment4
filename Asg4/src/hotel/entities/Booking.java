@@ -23,7 +23,7 @@ public class Booking {
 	CreditCard creditCard;
 	
 	private List<ServiceCharge> charges;
-	
+	ServiceChargeHelper serviceChargeHelper; // serviceChargeHelper type object
 	private State state;
 
 
@@ -42,6 +42,7 @@ public class Booking {
 		this.creditCard = creditCard;
 		this.charges = new ArrayList<>();
 		this.state = State.PENDING;
+		this.serviceChargeHelper = ServiceChargeHelper.getInstance(); //setting ServiceChargeHelper instance
 	}
 
 	
@@ -50,7 +51,7 @@ public class Booking {
 		calendar.setTime(arrivalDate);
 		
 		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
+		int month = calendar.get(Calendar.MONTH) + 1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		
 		String numberString = String.format("%d%d%d%d", day, month, year, roomId);
@@ -134,17 +135,34 @@ public class Booking {
 
 
 	public void checkIn() {
+		if (state != State.PENDING){  //if condition to make sure if the room is not checked in before
+			String msg = String.format("Booking: checkIn : bad state : %s", state);
+			throw new RuntimeException(msg);
+		}
 		room.checkin();
+		state = State.CHECKED_IN; // setting the room state to checked in
 	}
 
 
 	public void addServiceCharge(ServiceType serviceType, double cosst) {
-		charges.add(new ServiceCharge(serviceType, cost));
+		if (state != State.CHECKED_IN) {      // if condition to make sure if the room is checked in then proceed to charge services
+			String msg = String.format("Booking: addServiceCharge : bad state : %s", state);   
+			throw new RunTimeException(msg);
+		}
+		ServiceCharge charge = serviceChargeHelper.makeServiceCharge(serviceType, cost);
+		charges.add(charge);  // BUG FIX : adding service charges
 	}
 
 
 	public void checkOut() {
+		if (state != State.CHECKED_IN){  //if condition to make sure if the room is not checked out before
+			String msg = String.format("Booking: checkOut : bad state : %s", state);
+			throw new RuntimeException(msg);
+		}
+		
+		
 		room.checkout(this);
+		state = State.CHECKED_OUT; // setting the room state to checked out
 	}
 
 }
