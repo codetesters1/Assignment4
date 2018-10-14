@@ -73,6 +73,7 @@ public class Room {
 
 	public void checkout(Booking booking) {
 		state = state.READY;
+		bookings.remove(booking);//Fixed Bug 02 - Added method call
 	}
 
 
