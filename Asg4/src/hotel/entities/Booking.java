@@ -138,7 +138,7 @@ public class Booking {
 	}
 
 
-	public void addServiceCharge(ServiceType serviceType, double cosst) {
+	public void addServiceCharge(ServiceType serviceType, double cost) { // Fixed Bug 01 - Changed Varibale cosst to cost
 		charges.add(new ServiceCharge(serviceType, cost));
 	}
 
