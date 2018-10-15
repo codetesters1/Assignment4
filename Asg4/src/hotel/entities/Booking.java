@@ -135,16 +135,19 @@ public class Booking {
 
 	public void checkIn() {
 		room.checkin();
+		this.state = State.CHECKED_IN;
 	}
 
 
 	public void addServiceCharge(ServiceType serviceType, double cosst) {
+		if(this.state == State.CHECKED_IN)
 		charges.add(new ServiceCharge(serviceType, cosst));
 	}
 
 
 	public void checkOut() {
 		room.checkout(this);
+		this.state = State.CHECKED_OUT;
 	}
 
 }
